@@ -2,7 +2,6 @@ package com.denyskostetskyi.systemmonitor.client
 
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
@@ -15,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.denyskostetskyi.systemmonitor.client.databinding.ActivityMainBinding
 import com.denyskostetskyi.systemmonitor.library.ISystemMonitorService
+import com.denyskostetskyi.systemmonitor.library.SystemMonitorServiceHelper
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindSystemMonitorService() {
-        val intent = Intent() //TODO use valid intent
+        val intent = SystemMonitorServiceHelper.newIntent()
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
