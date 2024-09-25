@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "SystemMonitor"
 include(":app")
 include(":server")
+include(":Library")

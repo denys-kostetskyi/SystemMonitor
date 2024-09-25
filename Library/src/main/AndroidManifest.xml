@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <permission
+        android:name="com.denyskostetskyi.systemmonitor.permission.SYSTEM_MONITOR_SERVICE"
+        android:label="@string/permission_description"
+        android:protectionLevel="signature" />
+</manifest>
