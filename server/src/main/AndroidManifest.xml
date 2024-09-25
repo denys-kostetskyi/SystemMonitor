@@ -12,6 +12,7 @@
         android:theme="@style/Theme.SystemMonitor">
         <service
             android:name=".SystemMonitorService"
+            android:permission="com.denyskostetskyi.systemmonitor.permission.SYSTEM_MONITOR_SERVICE"
             android:enabled="true"
             android:exported="true" />
 
