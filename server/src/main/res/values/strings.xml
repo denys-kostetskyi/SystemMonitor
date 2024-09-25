@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SystemMonitor Server</string>
+    <string name="uptime_seconds">Uptime: %1$d seconds</string>
+    <string name="running_processes">Running Processes: %1$d</string>
+</resources>
