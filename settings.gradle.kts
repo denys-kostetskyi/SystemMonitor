@@ -23,3 +23,4 @@ rootProject.name = "SystemMonitor"
 include(":app")
 include(":server")
 include(":library")
+include(":client")
