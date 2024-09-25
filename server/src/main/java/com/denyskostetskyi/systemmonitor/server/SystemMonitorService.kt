@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
+import android.util.Log
 import com.denyskostetskyi.systemmonitor.library.ISystemMonitorService
 
+//TODO add startForeground call
 class SystemMonitorService : Service() {
     private val activityManager by lazy { getSystemService(ActivityManager::class.java) }
     private var serviceBootTime = 0L
@@ -26,13 +28,16 @@ class SystemMonitorService : Service() {
     override fun onCreate() {
         super.onCreate()
         serviceBootTime = System.currentTimeMillis()
+        Log.d(TAG, "onCreate")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d(TAG, "onStartCommand")
         return START_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder {
+        Log.d(TAG, "onBind")
         return binder
     }
 
@@ -54,6 +59,8 @@ class SystemMonitorService : Service() {
     }
 
     companion object {
+        private const val TAG = "SystemMonitorService"
+
         private fun millisToSeconds(millis: Long) = millis / 1000
 
         fun newIntent(context: Context) = Intent(context, SystemMonitorService::class.java)
