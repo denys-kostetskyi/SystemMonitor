@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SystemMonitor Client</string>
+    <string name="service_unexpectedly_disconnected">SystemMonitorService unexpectedly disconnected</string>
 </resources>
