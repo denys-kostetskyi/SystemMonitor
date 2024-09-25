@@ -1,0 +1,3 @@
+<resources>
+    <string name="permission_description">Allows the app to bind SystemMonitorService</string>
+</resources>

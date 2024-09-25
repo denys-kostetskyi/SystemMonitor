@@ -6,11 +6,22 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.SystemClock
+import com.denyskostetskyi.systemmonitor.library.ISystemMonitorService
 
 class SystemMonitorService : Service() {
     private val activityManager by lazy { getSystemService(ActivityManager::class.java) }
-
     private var serviceBootTime = 0L
+
+    private val binder = object : ISystemMonitorService.Stub() {
+        override fun getServiceRunningTime() =
+            this@SystemMonitorService.getServiceRunningTime()
+
+        override fun getRunningProcessIds() =
+            this@SystemMonitorService.getRunningProcessIds()
+
+        override fun getSystemInfo() =
+            this@SystemMonitorService.getSystemInfo()
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -22,7 +33,7 @@ class SystemMonitorService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+        return binder
     }
 
     private fun getServiceRunningTime() =
