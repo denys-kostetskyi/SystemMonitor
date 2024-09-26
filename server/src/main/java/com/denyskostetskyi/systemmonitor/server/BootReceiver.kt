@@ -8,11 +8,14 @@ import android.util.Log
 
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            Log.d(TAG, "ACTION_BOOT_COMPLETED received. Starting SystemMonitorService")
+        if (isBootAction(intent.action) && !SystemMonitorService.isServiceRunning) {
+            Log.d(TAG, "${intent.action} received. Starting SystemMonitorService")
             startSystemMonitorService(context)
         }
     }
+
+    private fun isBootAction(action: String?) =
+        action == Intent.ACTION_BOOT_COMPLETED || action == Intent.ACTION_LOCKED_BOOT_COMPLETED
 
     private fun startSystemMonitorService(context: Context) {
         val intent = SystemMonitorService.newIntent(context)
