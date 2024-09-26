@@ -3,6 +3,10 @@
 
     <uses-permission android:name="com.denyskostetskyi.systemmonitor.permission.SYSTEM_MONITOR_SERVICE" />
 
+    <queries>
+        <package android:name="com.denyskostetskyi.systemmonitor.server" />
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
