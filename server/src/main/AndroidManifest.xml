@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -12,9 +13,10 @@
         android:theme="@style/Theme.SystemMonitor">
         <service
             android:name=".SystemMonitorService"
-            android:permission="com.denyskostetskyi.systemmonitor.permission.SYSTEM_MONITOR_SERVICE"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:foregroundServiceType="specialUse"
+            android:permission="com.denyskostetskyi.systemmonitor.permission.SYSTEM_MONITOR_SERVICE" />
 
         <receiver
             android:name=".BootReceiver"
