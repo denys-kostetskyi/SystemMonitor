@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.os.RemoteException
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -23,8 +24,8 @@ class MainActivity : AppCompatActivity() {
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             systemMonitorService = ISystemMonitorService.Stub.asInterface(service)
+            Log.d(TAG, "Bound to ${className.className}")
             updateUiLoadingState(false)
-            testSystemMonitorService()
         }
 
         override fun onServiceDisconnected(className: ComponentName) {
@@ -46,39 +47,96 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        bindSystemMonitorService()
         initViews()
     }
 
-    private fun initViews() {
-        with(binding) {
-            buttonTest.setOnClickListener {
-                updateUiLoadingState(true)
-                bindSystemMonitorService()
-            }
-        }
-    }
-
-    private fun updateUiLoadingState(isLoading: Boolean) {
-        with(binding) {
-            buttonTest.isEnabled = !isLoading
-            progressBar.isVisible = isLoading
-        }
-    }
-
     private fun bindSystemMonitorService() {
+        updateUiLoadingState(true)
         val intent = SystemMonitorServiceHelper.newIntent()
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
-    private fun testSystemMonitorService() {
-        systemMonitorService?.let {
-            thread {
-                Log.d(TAG, "System information: ${it.systemInfo}")
-                Log.d(TAG, "SystemMonitorService running time: ${it.serviceRunningTime}")
-                Log.d(TAG, "Running process ids: ${it.runningProcessIds}")
+    private fun updateUiLoadingState(isLoading: Boolean) {
+        with(binding) {
+            progressBar.isVisible = isLoading
+            buttonServiceRunningTime.isEnabled = !isLoading
+            buttonSystemInfo.isEnabled = !isLoading
+            buttonRunningProcessIds.isEnabled = !isLoading
+        }
+    }
+
+    private fun initViews() {
+        setServiceRunningTimeButtonClickListener()
+        setSystemInfoButtonClickListener()
+        setRunningProcessIdsButtonClickListener()
+    }
+
+    private fun setServiceRunningTimeButtonClickListener() {
+        binding.buttonServiceRunningTime.setOnClickListener {
+            callServiceInBackground {
+                val runningTime = systemMonitorService?.serviceRunningTime
+                runOnUiThread {
+                    val result =
+                        getString(R.string.result_service_running_time, runningTime.toString())
+                    binding.textViewServiceRunningTime.text = result
+                }
             }
         }
     }
+
+    private fun setSystemInfoButtonClickListener() {
+        binding.buttonSystemInfo.setOnClickListener {
+            callServiceInBackground {
+                val systemInfo = systemMonitorService?.systemInfo
+                runOnUiThread {
+                    binding.textViewSystemInfo.text = systemInfo
+                }
+            }
+        }
+    }
+
+    private fun setRunningProcessIdsButtonClickListener() {
+        binding.buttonRunningProcessIds.setOnClickListener {
+            callServiceInBackground {
+                val processIds = systemMonitorService?.runningProcessIds
+                val formattedIds = formatIntArray(processIds)
+                runOnUiThread {
+                    val result = getString(R.string.result_running_process_ids, formattedIds)
+                    binding.textViewRunningProcessIds.text = result
+                }
+            }
+        }
+    }
+
+    private fun callServiceInBackground(call: () -> Unit) {
+        if (systemMonitorService == null) {
+            bindSystemMonitorService()
+            return
+        }
+        updateUiLoadingState(true)
+        thread {
+            try {
+                call.invoke()
+            } catch (e: RemoteException) {
+                runOnUiThread {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.could_not_connect_to_service),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            runOnUiThread { updateUiLoadingState(false) }
+        }
+    }
+
+    private fun formatIntArray(array: IntArray?) = array?.joinToString(
+        prefix = "[ ",
+        postfix = " ]",
+        separator = ", "
+    ) ?: "[]"
+
 
     private fun unbindSystemMonitorService() {
         unbindService(serviceConnection)

@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">SystemMonitor Client</string>
     <string name="service_unexpectedly_disconnected">SystemMonitorService unexpectedly disconnected</string>
+    <string name="bind_system_monitor_service">Bind System Monitor Service</string>
+    <string name="get_service_running_time">Get service\'s running time</string>
+    <string name="get_system_info">Get system info</string>
+    <string name="get_the_ids_of_running_processes">Get the IDs of running processes</string>
+    <string name="result">Result</string>
+    <string name="could_not_connect_to_service">Could not connect to SystemMonitorService</string>
+    <string name="result_service_running_time">Service is running for %1$s seconds</string>
+    <string name="result_running_process_ids">IDs of running processes: %1$s</string>
 </resources>
