@@ -2,4 +2,8 @@
     <string name="app_name">SystemMonitor Server</string>
     <string name="uptime_seconds">Uptime: %1$d seconds</string>
     <string name="running_processes">Running Processes: %1$d</string>
+    <string name="service_notification_channel">Channel for System Monitor Service notification</string>
+    <string name="system_monitor_service">System Monitor Service</string>
+    <string name="service_is_running">Service is running</string>
+    <string name="start_service">Start service</string>
 </resources>
