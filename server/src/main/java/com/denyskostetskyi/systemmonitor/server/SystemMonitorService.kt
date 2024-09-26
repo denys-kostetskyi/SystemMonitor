@@ -33,6 +33,7 @@ class SystemMonitorService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isServiceRunning = true
         serviceBootTime = System.currentTimeMillis()
         Log.d(TAG, "onCreate")
     }
@@ -46,6 +47,11 @@ class SystemMonitorService : Service() {
     override fun onBind(intent: Intent): IBinder {
         Log.d(TAG, "onBind")
         return binder
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        isServiceRunning = false
     }
 
     private fun getServiceRunningTime() =
@@ -108,6 +114,9 @@ class SystemMonitorService : Service() {
         private const val SERVICE_ID = 1
 
         private fun millisToSeconds(millis: Long) = millis / 1000
+
+        var isServiceRunning = false
+            private set
 
         fun newIntent(context: Context) = Intent(context, SystemMonitorService::class.java)
     }
